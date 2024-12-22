@@ -10,15 +10,16 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Get the real user who ran sudo
+REAL_USER=${SUDO_USER:-$USER}
+HOME_DIR=$(eval echo ~$REAL_USER)
+
 # Installation directories
 INSTALL_DIR="/opt/termbol"
 BIN_DIR="/usr/local/bin"
 
-echo -e "\n\e[34m[1/2]\e[0m Removing program files..."
+echo -e "\n\e[34m[1/1]\e[0m Removing program files..."
 rm -f "$BIN_DIR/termbol"
 rm -rf "$INSTALL_DIR"
-
-echo -e "\e[34m[2/2]\e[0m Cleaning up Python packages..."
-pip3 uninstall -y -r requirements.txt > /dev/null 2>&1 || echo -e "\e[33mWarning: Could not uninstall Python packages\e[0m"
 
 echo -e "\n\e[32m✓ Uninstallation completed!\e[0m"
